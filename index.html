@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>阿迪的工具集 · Adi's Hub</title>
+<meta name="description" content="阿迪的 11 个 GitHub Pages 站点聚合入口：工具、内容与演示">
+<style>
+  :root{
+    --paper:   #f5f0e4;   /* 宣纸暖底 */
+    --paper-2: #efe8d6;
+    --card:    rgba(249,245,233,.72);
+    --ink:     #2b2620;   /* 暖墨色 */
+    --ink-soft:#6f6656;
+    --ink-faint:#9a907c;
+    --seal:    #c23b2e;   /* 朱砂红 */
+    --seal-soft: rgba(194,59,46,.38);
+    --line:    rgba(43,38,32,.14);
+    --line-strong: rgba(43,38,32,.26);
+    --serif: "Songti SC","STSong","Noto Serif SC","SimSun",serif;
+    --sans:  "PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    --mono:  "SF Mono","Menlo","Consolas","Courier New",monospace;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+  html{scroll-behavior:smooth;}
+  body{
+    font-family:var(--sans);
+    color:var(--ink);
+    background:var(--paper);
+    -webkit-font-smoothing:antialiased;
+    text-rendering:optimizeLegibility;
+    min-height:100vh;
+  }
+  ::selection{background:rgba(194,59,46,.18);}
+
+  /* 宣纸纹理 + 淡墨晕染 */
+  .paper{
+    position:fixed;inset:0;z-index:-1;pointer-events:none;
+    background-color:var(--paper);
+    background-image:
+      radial-gradient(760px 360px at 84% -8%, rgba(43,38,32,.085), transparent 62%),
+      radial-gradient(580px 320px at 4% -12%, rgba(194,59,46,.06), transparent 60%),
+      radial-gradient(1000px 560px at 50% 118%, rgba(43,38,32,.07), transparent 62%),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='240' height='240'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.8' numOctaves='2' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='240' height='240' filter='url(%23n)' opacity='0.55'/%3E%3C/svg%3E");
+    background-repeat:no-repeat,no-repeat,no-repeat,repeat;
+    opacity:.92;
+  }
+
+  .wrap{max-width:1180px;margin:0 auto;padding:0 22px;}
+
+  /* ===== 报头 ===== */
+  .masthead{padding:34px 0 0;}
+  .topline{display:flex;align-items:center;gap:14px;}
+  .seal{
+    display:inline-flex;align-items:center;justify-content:center;
+    width:44px;height:44px;background:var(--seal);color:#f7f2e4;
+    font-family:var(--serif);font-size:23px;font-weight:700;
+    border-radius:6px;transform:rotate(-4deg);flex:none;
+    box-shadow:3px 4px 0 rgba(194,59,46,.18);
+    user-select:none;
+  }
+  .topmeta{display:flex;flex-direction:column;gap:2px;}
+  .en{font-family:var(--mono);font-size:13px;letter-spacing:4px;color:var(--ink);font-weight:600;}
+  .est{font-family:var(--mono);font-size:10px;letter-spacing:2px;color:var(--ink-faint);}
+
+  h1.title{
+    font-family:var(--serif);font-weight:700;
+    font-size:clamp(36px,8vw,62px);line-height:1.14;
+    letter-spacing:3px;margin:30px 0 12px;
+  }
+  h1.title span{color:var(--seal);}
+
+  .lede{font-size:15px;color:var(--ink-soft);line-height:1.8;letter-spacing:.5px;}
+  .lede em{font-style:normal;color:var(--seal);font-family:var(--serif);}
+
+  nav.index{
+    margin-top:20px;display:flex;flex-wrap:wrap;gap:6px 20px;
+    font-family:var(--serif);font-size:14px;letter-spacing:2px;
+  }
+  nav.index a{color:var(--ink);text-decoration:none;transition:color .15s;}
+  nav.index a:hover{color:var(--seal);}
+  nav.index .dot{color:var(--ink-faint);font-family:var(--sans);}
+
+  .mastline{
+    display:flex;flex-wrap:wrap;gap:8px 26px;
+    border-top:1px solid var(--line-strong);
+    border-bottom:1px solid var(--line-strong);
+    padding:9px 0;margin-top:26px;
+    font-family:var(--mono);font-size:10.5px;letter-spacing:2.5px;
+    color:var(--ink-soft);text-transform:uppercase;
+  }
+  .mastline b{color:var(--seal);font-weight:600;}
+
+  /* ===== 分组 ===== */
+  .group{margin-top:52px;scroll-margin-top:26px;}
+  .group-head{display:flex;align-items:baseline;gap:14px;margin-bottom:18px;}
+  .g-no{font-family:var(--serif);font-size:30px;font-weight:700;color:var(--seal);line-height:1;}
+  .g-name{font-family:var(--serif);font-size:23px;font-weight:700;letter-spacing:3px;line-height:1;}
+  .g-en{font-family:var(--mono);font-size:10px;letter-spacing:3px;color:var(--ink-faint);font-weight:400;}
+  .g-count{
+    font-family:var(--mono);font-size:10.5px;color:var(--ink-soft);
+    border:1px solid var(--line);border-radius:999px;padding:2px 9px;line-height:1.4;
+  }
+  .group-head::after{content:"";flex:1;height:1px;background:var(--line);align-self:center;}
+
+  /* ===== 卡片网格 ===== */
+  .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(238px,1fr));gap:14px;}
+
+  .card{
+    display:flex;flex-direction:column;gap:11px;min-width:0;
+    background:var(--card);
+    border:1px solid var(--line);
+    border-radius:12px;
+    padding:18px 18px 13px;
+    box-shadow:0 6px 18px -10px rgba(43,38,32,.22);
+    text-decoration:none;color:var(--ink);
+    transition:border-color .18s ease,transform .18s ease,box-shadow .18s ease,background .18s ease;
+  }
+  .card:hover{
+    transform:translateY(-3px);
+    border-color:var(--seal);
+    background:rgba(250,246,235,.92);
+    box-shadow:0 12px 26px -12px rgba(194,59,46,.30);
+  }
+  .card-icon{
+    width:40px;height:40px;flex:none;
+    border:1px solid var(--seal-soft);border-radius:9px;
+    color:var(--seal);
+    display:flex;align-items:center;justify-content:center;
+    transition:background .18s ease,color .18s ease,border-color .18s ease;
+  }
+  .card-icon svg{width:21px;height:21px;}
+  .card:hover .card-icon{background:var(--seal);border-color:var(--seal);color:#f7f2e4;}
+  .card-name{font-family:var(--serif);font-size:18px;font-weight:700;letter-spacing:1px;line-height:1.35;}
+  .card-desc{font-size:12.5px;color:var(--ink-soft);line-height:1.65;letter-spacing:.3px;}
+  .card-meta{
+    margin-top:auto;padding-top:11px;
+    display:flex;align-items:center;justify-content:space-between;gap:8px;
+    border-top:1px dashed var(--line);
+  }
+  .repo{font-family:var(--mono);font-size:10.5px;color:var(--ink-faint);letter-spacing:.3px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+  .go{font-size:15px;color:var(--seal);flex:none;transition:transform .18s ease;}
+  .card:hover .go{transform:translate(2px,-2px);}
+
+  /* ===== 页脚 ===== */
+  .foot{margin-top:60px;border-top:1px solid var(--line-strong);}
+  .foot-in{display:flex;gap:16px;align-items:center;padding:24px 0 40px;}
+  .seal.small{width:36px;height:36px;font-size:18px;border-radius:5px;}
+  .f1{font-family:var(--serif);font-size:13px;letter-spacing:2px;}
+  .f2{font-size:11px;color:var(--ink-soft);letter-spacing:1px;margin-top:4px;}
+  .f2 b{color:var(--seal);font-weight:600;}
+
+  a:focus-visible{outline:2px solid var(--seal);outline-offset:3px;border-radius:6px;}
+  @media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important;}}
+
+  /* ===== 响应式 ===== */
+  @media (max-width:560px){
+    .wrap{padding:0 18px;}
+    .masthead{padding-top:26px;}
+    h1.title{margin-top:24px;letter-spacing:2px;}
+    .grid{grid-template-columns:1fr;gap:12px;}
+    .group-head{gap:10px;}
+    .g-name{font-size:21px;}
+    .mastline{gap:6px 18px;}
+  }
+</style>
+</head>
+<body>
+<div class="paper" aria-hidden="true"></div>
+
+<header class="masthead">
+  <div class="wrap">
+    <div class="topline">
+      <span class="seal" aria-hidden="true">迪</span>
+      <div class="topmeta">
+        <span class="en">ADI'S HUB</span>
+        <span class="est">EST. 2026 · GITHUB PAGES</span>
+      </div>
+    </div>
+    <h1 class="title">阿迪的<span>工具集</span></h1>
+    <p class="lede">散落在 GitHub Pages 上的小玩意儿，<em>都收在这里了</em>。</p>
+    <nav class="index" aria-label="分类索引">
+      <a href="#g1">壹 工具</a><span class="dot">·</span>
+      <a href="#g2">贰 内容</a><span class="dot">·</span>
+      <a href="#g3">叁 演示</a>
+    </nav>
+    <div class="mastline">
+      <span>收录 <b id="total">—</b> 个站点</span>
+      <span>零依赖 · 单文件</span>
+      <span>2026 年 8 月</span>
+    </div>
+  </div>
+</header>
+
+<main class="wrap" id="hub"></main>
+
+<footer class="foot">
+  <div class="wrap foot-in">
+    <span class="seal small" aria-hidden="true">迪</span>
+    <div>
+      <p class="f1">© 2026 阿迪 · 工具集</p>
+      <p class="f2">宣纸为底 · 墨色为文 · 朱砂点睛 —— 本站托管于 GitHub Pages</p>
+    </div>
+  </div>
+</footer>
+
+<script>
+/* ============ 站点数据：增删改这里即可 ============ */
+const CATS = [
+  {
+    no:'壹', name:'工具', en:'TOOLS',
+    items:[
+      {name:'姓名牌编辑器', desc:'A4 三角桌牌 · 华文新魏字体打包', repo:'name-card-site',    url:'https://adihaha.github.io/name-card-site/',      icon:'card'},
+      {name:'热榜聚合',     desc:'11 平台实时榜单 · 60s API 直连', repo:'rankings',          url:'https://adihaha.github.io/rankings/',            icon:'flame'},
+      {name:'珠海天气',     desc:'柔紫 SVG 信息图',               repo:'weather-infographic', url:'https://adihaha.github.io/weather-infographic/',  icon:'sun'},
+      {name:'人物分析器',   desc:'Persona Analyzer · 性格洞察',   repo:'persona-analyzer',   url:'https://adihaha.github.io/persona-analyzer/',     icon:'user'}
+    ]
+  },
+  {
+    no:'贰', name:'内容', en:'CONTENT',
+    items:[
+      {name:'STORM 研究文库', desc:'深度长文 · 维基百科式研究', repo:'storm-articles', url:'https://adihaha.github.io/storm-articles/', icon:'book'},
+      {name:'Kami 紙 预览',   desc:'暖羊皮纸文档排版预览',       repo:'kami-preview',   url:'https://adihaha.github.io/kami-preview/',     icon:'file'},
+      {name:'VBlog 个人博客', desc:'主站 · 杂记与随笔',           repo:'adihaha.github.io', url:'https://adihaha.github.io/',                  icon:'pen'}
+    ]
+  },
+  {
+    no:'叁', name:'演示', en:'DEMOS',
+    items:[
+      {name:'FakeWaimai',     desc:'假外卖 · 美团 UI 复刻演示', repo:'fakewaimai',     url:'https://adihaha.github.io/fakewaimai/',            icon:'bag'},
+      {name:'王者对位分析',   desc:'王者荣耀英雄对位分析',       repo:'wzry-analysis',  url:'https://adihaha.github.io/wzry-analysis/',        icon:'shield'},
+      {name:'旧个人站',       desc:'早期个人站点存档',           repo:'adi.github.com', url:'https://adihaha.github.io/adi.github.com/',       icon:'archive'},
+      {name:'简单 Web 页面',  desc:'练手的小页面',               repo:'web',            url:'https://adihaha.github.io/web/',                  icon:'globe'}
+    ]
+  }
+];
+
+/* ============ 内联 SVG 图标（细线风格） ============ */
+const ICONS = {
+  card:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="1" y="4" width="22" height="16" rx="2"/><line x1="1" y1="10" x2="23" y2="10"/><line x1="6" y1="15" x2="10" y2="15"/></svg>',
+  flame:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8.5 14.5A2.5 2.5 0 0 0 11 12c0-1.38-.5-2-1-3-1.07-2.14-.22-4.05 2-6 .5 2.5 2 4.9 4 6.5 2 1.6 3 3.5 3 5.5a7 7 0 1 1-14 0c0-1.15.43-2.29 1-3a2.5 2.5 0 0 0 2.5 2.5z"/></svg>',
+  sun:    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>',
+  user:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/><circle cx="12" cy="7" r="4"/></svg>',
+  book:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/><path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/></svg>',
+  file:   '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/></svg>',
+  pen:    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20h9"/><path d="M16.5 3.5a2.12 2.12 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/></svg>',
+  bag:    '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M6 2L3 6v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2V6l-3-4z"/><line x1="3" y1="6" x2="21" y2="6"/><path d="M16 10a4 4 0 0 1-8 0"/></svg>',
+  shield: '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/><path d="M8.5 11.5l2.4 2.4 4.6-4.8"/></svg>',
+  archive:'<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><polyline points="21 8 21 21 3 21 3 8"/><rect x="1" y="3" width="22" height="5"/><line x1="10" y1="12" x2="14" y2="12"/></svg>',
+  globe:  '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>'
+};
+
+/* ============ 渲染 ============ */
+function render(){
+  const hub = document.getElementById('hub');
+  let total = 0;
+  const groups = CATS.map(function(cat, i){
+    total += cat.items.length;
+    const cards = cat.items.map(function(it){
+      return '<a class="card" href="' + it.url + '" target="_blank" rel="noopener noreferrer">' +
+        '<span class="card-icon" aria-hidden="true">' + ICONS[it.icon] + '</span>' +
+        '<span class="card-name">' + it.name + '</span>' +
+        '<span class="card-desc">' + it.desc + '</span>' +
+        '<span class="card-meta"><span class="repo">' + it.repo + '</span><span class="go" aria-hidden="true">↗</span></span>' +
+      '</a>';
+    }).join('');
+    return '<section class="group" id="g' + (i+1) + '">' +
+      '<div class="group-head">' +
+        '<span class="g-no" aria-hidden="true">' + cat.no + '</span>' +
+        '<h2 class="g-name">' + cat.name + ' <span class="g-en">' + cat.en + '</span></h2>' +
+        '<span class="g-count">' + cat.items.length + '</span>' +
+      '</div>' +
+      '<div class="grid">' + cards + '</div>' +
+    '</section>';
+  }).join('');
+  hub.innerHTML = groups;
+  document.getElementById('total').textContent = total;
+}
+render();
+</script>
+</body>
+</html>
